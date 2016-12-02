@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles/all.css">
+</head>
+<body>
+<header>
+    <a href="#" class="js-toggler" data-toggler-id="menu" data-toggler-group="menu">open</a>
+    <div class="header-content js-item-toggler" data-toggler-itemid="menu" data-toggler-group="menu">content</div>
+</header>
+<section>
+    <p><span class="js-module" data-module="test">module test</span></p>
+    <p><span class="js-module" data-module="popular-books">load popular books</span></p>
+    <table class="table-pop" id="loadpopularbooks"></table>
+</section>
+<script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+<script>
+    var jsonendpoint = {
+        popular_books: {
+            url: 'https://opendata.paris.fr/api/records/1.0/search/?',
+            method: 'get',
+            params: {
+                dataset: 'titres-les-plus-pretes-bibliotheques-specialisees-en-2014',
+                facet: ['auteur', 'editeur', 'collection', 'categorie_documentaire']
+            }
+        }
+    };
+</script>
+<script type="text/template" id="tpl_popularbooks_th">
+    <tr>
+        <th>titre</th>
+        <th>annee edition</th>
+        <th>categorie documentaire</th>
+        <th>editeur</th>
+        <th>collection</th>
+        <th>nb prets 2014</th>
+    </tr>
+</script>
+<script type="text/template" id="tpl_popularbooks">
+    <tr>
+        <td>{{ titre }}</td>
+        <td>{{annee_edition }}</td>
+        <td>{{ categorie_documentaire }}</td>
+        <td>{{ editeur }}</td>
+        <td>{{ collection }}</td>
+        <td>{{ nb_prets_2014 }}</td>
+    </tr>
+</script>
+<script src="scripts/bundle.js"></script>
+</body>
+</html>

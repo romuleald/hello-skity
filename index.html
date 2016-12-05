@@ -11,8 +11,32 @@
     <div class="header-content js-item-toggler" data-toggler-itemid="menu" data-toggler-group="menu">content</div>
 </header>
 <section>
-    <p><span class="js-module" data-module="test">module test</span></p>
-    <p><span class="js-module" data-module="popular-books">load popular books</span></p>
+    <p>
+        Ce module a été initialisé, il suffit de regarder la console pour le voir <br>
+        <span class="js-module" data-module="test test-no-load" data-module-test-lol1="très lol" data-module-test-lol2="mdr">module test</span>
+        <span class="js-module" data-module="test" data-module-test-lol1="hyper lol" data-module-test-lol2="megamdr">module test</span>
+    </p>
+    <p>
+        Ce module permet de charger les titres les plus prêtés en bibliothèque à Paris via l'opendata <br>
+        Il utilise plusieurs dépendences :
+    </p>
+    <ul>
+        <li>get-services
+            <ul>
+                <li>ajax (jQuery)
+                    <ul>
+                        <li>ajax-load (pas obligatoire)</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>getTpl</li>
+        <li>Module</li>
+        <!--<li>Toggler (jQuery)</li>-->
+    </ul>
+    <p>
+        <span class="js-module" data-module="popular-books">load popular books</span>
+    </p>
     <table class="table-pop" id="loadpopularbooks"></table>
 </section>
 <script

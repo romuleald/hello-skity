@@ -6,7 +6,7 @@ var moduleTest = (function () {
 
     var ready = function (elem) {
 
-        console.info(`le module test a été init au DOMReady via l'élément`, elem);
+        console.info(`le module test a été init au DOMReady via l'élément`, elem, this);
 
     };
     var load = function (elem) {

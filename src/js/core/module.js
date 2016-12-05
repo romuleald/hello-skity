@@ -17,6 +17,21 @@ var webmodule = (function () {
      each module can export a ready() (or init()) and a load() function
      */
 
+
+    var _create = function (module, moduleName, DOMModule) {
+        module.init = module.init || module.ready;
+        let data = {};
+        for (var i = 0; DOMModule.attributes[i]; i++) {
+            var attribute = DOMModule.attributes[i];
+            let name = attribute.nodeName;
+            if (new RegExp(`^data-module-${moduleName}-`).test(name)) {
+                let dataName = name.split(`data-module-${moduleName}-`)[1];
+                data[dataName] = {value: attribute.nodeValue};
+            }
+        }
+        return Object.create(module, data);
+    };
+
     /**
      *
      * @param modules {NodeList}
@@ -24,27 +39,31 @@ var webmodule = (function () {
      * @return {{ready: Array, load: Array}}
      */
     var parseModules = function (modules, loadFlag = false) {
-        let ready = [];
-        let load = [];
-        for (let module of modules) {
-            if(!regIsInit.test(module.className)){
-                let _moduleName = module.getAttribute('data-module');
-                try {
-                    let _module = require('../modules/' + _moduleName).default;
-                    ready.push({module: _module.ready || _module.init, elem: module});
-                    loadFlag && load.push({module: _module.load, elem: module});
-                }
-                catch (e) {
-                    console.error(e);
-                    console.error('Module not foud', '../modules/' + _moduleName, module);
+        let moduleReady = [];
+        let modulesLoad = [];
+        for (let DOMModule of modules) {
+            if (!regIsInit.test(DOMModule.className)) {
+                let _moduleNameSplit = DOMModule.getAttribute('data-module').split(' ');
+                for (var i = 0; i < _moduleNameSplit.length; i++) {
+                    var _moduleName = _moduleNameSplit[i];
+                    try {
+                        let importModule = require('../modules/' + _moduleName).default;
+                        var module = _create(importModule, _moduleName, DOMModule);
+                        moduleReady.push({module: module, elem: DOMModule});
+                        loadFlag && modulesLoad.push({module: module, elem: DOMModule});
+                    }
+                    catch (e) {
+                        console.error(e);
+                        console.error('Module not foud', '../modules/' + _moduleName, DOMModule);
+                    }
                 }
             }
         }
 
-        exec(ready, true);
+        exec(moduleReady, true);
 
         loadFlag && window.addEventListener('load', function () {
-            exec(load);
+            exec(modulesLoad, null, true);
         });
     };
 
@@ -56,15 +75,19 @@ var webmodule = (function () {
      *
      * @param modules
      * @param flag=false {Boolean} addClass to mark module has already done
+     * @param doLoad=false {Boolean} exec load function
      */
-    var exec = function (modules, flag = false) {
+    var exec = function (modules, flag = false, doLoad = false) {
         modules.forEach(function (o) {
             let module = o.module;
-            if (module) {
-                module(o.elem);
+            if (!doLoad && module.init) {
+                module.init(o.elem);
                 if (flag) {
                     o.elem.className += ' ' + SELECTOR_INITIALIZED;
                 }
+            }
+            if (doLoad && module.load) {
+                module.load(o.elem);
             }
         });
     };

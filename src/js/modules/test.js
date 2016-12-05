@@ -10,7 +10,7 @@ var moduleTest = (function () {
 
     };
     var load = function (elem) {
-        console.info(`le module test a été init au LOAD via l'élément`, elem);
+        console.info(`le module test a été init au LOAD via l'élément`, elem, this);
 
     };
 

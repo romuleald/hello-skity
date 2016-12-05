@@ -24,8 +24,8 @@ var webmodule = (function () {
         for (var i = 0; DOMModule.attributes[i]; i++) {
             var attribute = DOMModule.attributes[i];
             let name = attribute.nodeName;
-            if (new RegExp(`^data-module-${moduleName}-`).test(name)) {
-                let dataName = name.split(`data-module-${moduleName}-`)[1];
+            if (new RegExp(`^data-module-${moduleName}--`).test(name)) {
+                let dataName = name.split(`data-module-${moduleName}--`)[1];
                 data[dataName] = {value: attribute.nodeValue};
             }
         }
